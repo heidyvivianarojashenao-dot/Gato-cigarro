@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Descargar proyecto
         uses: actions/checkout@v4
 
@@ -28,7 +29,30 @@ jobs:
       - name: Descomprimir proyecto
         run: |
           mkdir gato_project
-          unzip -q GATO_ANDROID_API36_GITHUB.zip -d gato_project
+          unzip -q GATO_ANDROID_API36_GITHUB_WHATSAPP_DIRECTO.zip -d gato_project
+
+      - name: Preparar proyecto GATO
+        run: |
+          cd gato_project/GATO_ANDROID
+
+          mkdir -p app/src/main/res/drawable
+
+          cp app/src/main/assets/icon-512.png app/src/main/res/drawable/icon_gato.png
+
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path("app/src/main/AndroidManifest.xml")
+          s = p.read_text()
+
+          s = s.replace(
+              '<application',
+              '<application\n        android:icon="@drawable/icon_gato"',
+              1
+          )
+
+          p.write_text(s)
+          PY
 
       - name: Instalar Gradle
         uses: gradle/actions/setup-gradle@v4
