@@ -35,4 +35,13 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name:
+      - name: Construir APK
+        run: |
+          cd gato_project/GATO_ANDROID
+          gradle assembleDebug --no-daemon
+
+      - name: Guardar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: GATO-APK
+          path: gato_project/GATO_ANDROID/app/build/outputs/apk/debug/app-debug.apk
